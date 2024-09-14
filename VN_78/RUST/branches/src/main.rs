@@ -1,7 +1,12 @@
 
 fn main () {
-    let fib = fib_num(8);
+
+    // using the for loop to print the first 10 fibonacci numbers 
+
+    for n in 0..10 {
+    let fib = fib_num(n);
     println!("{}", fib);
+    }
 }
 
 
