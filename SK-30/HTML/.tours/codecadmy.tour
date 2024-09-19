@@ -1,0 +1,11 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "codecadmy",
+  "steps": [
+    {
+      "file": "Tables.html",
+      "description": "learned how to create a table, add data to it, and section the table into smaller parts that make it easier to read.\r\n\r\nLet’s review what we’ve learned so far:\r\n\r\nThe <table> element creates a table.\r\nThe <tr> element adds rows to a table.\r\nTo add data to a row, you can use the <td> element.\r\nTable headings clarify the meaning of data. Headings are added with the <th> element.\r\nTable data can span columns using the colspan attribute.\r\nTable data can span rows using the rowspan attribute.\r\nTables can be split into three main sections: a head, a body, and a footer.\r\nA table’s head is created with the <thead> element.\r\nA table’s body is created with the <tbody> element.\r\nA table’s footer is created with the <tfoot> element.\r\nAll the CSS properties you learned about in this course can be applied to tables and their data.",
+      "line": 19
+    }
+  ]
+}
