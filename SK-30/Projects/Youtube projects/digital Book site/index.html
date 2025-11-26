@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Books Sky</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="navbar">
+            <h1>BookSky</h1>
+    </div>
+
+    <div class="container">
+        <div class="book-container">
+            <h2>Rich Dad Poor Dad</h2>
+            <h5>Robert</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+            <button onclick="deletebook(event)">Delete</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay">
+        <div class="popup-box">
+            <h2>Add Books</h2>
+            <form>
+                <input type="text" placeholder="Book Title" id="book-title-input">
+                <br>
+                <input type="text" placeholder="Book Author" id="book-author-input">
+                <br>
+                <textarea placeholder="Short Description" id="book-description-input"></textarea>
+                <br>
+                <!-- ✅ FIXED: Added type="button" to prevent form submission -->
+                <button type="button" id="add-book">ADD</button>
+                <button type="button" id="cancel-popup">CANCEL</button>
+            </form>
+        </div>
+    </div>
+
+    <button class="add-button" id="add-popup-button">+</button>
+
+    <script src="script.js"></script>
+</body>
+</html>

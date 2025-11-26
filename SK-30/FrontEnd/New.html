@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complete Code Demonstration</title>
+    <style>
+        body { font-family: sans-serif; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 5px; padding: 5px; border: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center; }
+        .delete-btn { margin-left: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>✅ To-Do List</h2>
+    <input id="int" placeholder="Enter new task">
+    <button onclick="add()">ADD</button>
+    
+    <ul id="list1">
+        <li>
+            Hello 
+            <button class="delete-btn" onclick="deleteItem(event)">Delete</button>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>👂 Event Listeners</h2>
+    <button id="btn">SHOW</button>
+    <p>Try clicking the "SHOW" button and hovering your mouse over it.</p>
+
+    <script>
+        // === 1. To-Do List Logic ===
+        var ul = document.getElementById("list1");
+        var input1 = document.getElementById("int");
+
+        function add() {
+            var inputValue = input1.value.trim();
+            if (inputValue === "") return; // Don't add empty items
+
+            var listitem = document.createElement("li");
+            
+            // Build the list item with the input value and a Delete button
+            listitem.innerHTML = inputValue + " <button class='delete-btn' onclick='deleteItem(event)'>Delete</button>";
+            
+            ul.append(listitem);
+            input1.value = ""; // Clear the input field
+        }
+
+        function deleteItem(event) {
+            // event.target is the Delete button
+            // parentElement is the <li> tag
+            event.target.parentElement.remove();
+        }
+
+        // === 2. Event Listener Logic ===
+        var button = document.getElementById("btn");
+
+        // Click Event Listener
+        button.addEventListener("click", function() {
+            alert("Hello");
+        });
+
+        // Mouse Over Event Listener
+        button.addEventListener("mouseover", function() {
+            alert("Mouse Over");
+        });
+
+        /*
+        // --- 3. DOM Manipulation Examples (Non-functional demonstration) ---
+        // These examples from your images are non-interactive, but are included here for completeness:
+
+        // Example of remove()
+        // var pa = document.getElementById("para");
+        // if (pa) pa.remove();
+
+        // Example of append/prepend
+        // var d = document.querySelector("div");
+        // d.append("Cloud");
+        // d.prepend("Tech");
+        
+        // Example of insertAdjacentElement
+        // var d = document.querySelector("div");
+        // var h = document.createElement("h1");
+        // d.insertAdjacentElement("beforebegin", h);
+        */
+    </script>
+
+</body>
+</html>

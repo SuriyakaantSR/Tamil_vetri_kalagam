@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Stack Roadmap Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338ca;
+            --success: #10B981;
+            --bg-color: #F3F4F6;
+            --card-bg: #ffffff;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Circular Progress */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.5s ease-in-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* Checkbox Animation */
+        .custom-checkbox input:checked + div {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        .custom-checkbox input:checked + div svg {
+            display: block;
+        }
+        
+        .section-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .section-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Confetti Animation Class */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+            z-index: 100;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <!-- Header Section -->
+    <header class="bg-indigo-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-layer-group text-2xl"></i>
+                <h1 class="text-xl sm:text-2xl font-bold tracking-tight">FSD Master Tracker</h1>
+            </div>
+            <div class="flex items-center space-x-4 bg-indigo-700 px-4 py-2 rounded-lg">
+                <span class="text-sm font-medium opacity-90">Total Progress</span>
+                <span id="total-percent" class="text-2xl font-bold">0%</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Top Stats Area -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Main Progress Circle -->
+            <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col items-center justify-center col-span-1 border border-gray-100">
+                <h3 class="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-4">Overall Completion</h3>
+                <div class="relative w-40 h-40">
+                    <svg class="w-full h-full" viewBox="0 0 120 120">
+                        <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="52" cx="60" cy="60" />
+                        <circle 
+                            id="main-progress-ring"
+                            class="progress-ring__circle text-indigo-600" 
+                            stroke-width="8" 
+                            stroke-dasharray="326.72" 
+                            stroke-dashoffset="326.72" 
+                            stroke-linecap="round" 
+                            stroke="currentColor" 
+                            fill="transparent" 
+                            r="52" 
+                            cx="60" 
+                            cy="60" 
+                        />
+                    </svg>
+                    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center flex-col">
+                        <span id="circle-percent" class="text-3xl font-bold text-gray-800">0%</span>
+                        <span class="text-xs text-gray-400">Mastery</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats & Reset -->
+            <div class="bg-white rounded-xl shadow-sm p-6 col-span-1 md:col-span-2 border border-gray-100 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Welcome Back, Developer!</h2>
+                    <p class="text-gray-600 mb-6">Track your journey from HTML basics to Full Stack mastery. Consistency is key.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="text-blue-600 text-sm font-medium">Topics Completed</div>
+                            <div id="completed-count" class="text-2xl font-bold text-blue-800">0</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <div class="text-purple-600 text-sm font-medium">Remaining</div>
+                            <div id="remaining-count" class="text-2xl font-bold text-purple-800">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button onclick="resetProgress()" class="text-sm text-red-500 hover:text-red-700 underline decoration-red-300">Reset All Progress</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-2 mb-6">
+            <button class="filter-btn active bg-indigo-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="all">All Modules</button>
+            <button class="filter-btn bg-white text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="frontend">Frontend</button>
+            <button class="filter-btn bg-white text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="backend">Backend</button>
+            <button class="filter-btn bg-white text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="projects">Projects</button>
+        </div>
+
+        <!-- Content Grid -->
+        <div id="roadmap-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Dynamic Content Will Be Injected Here -->
+        </div>
+
+    </main>
+
+    <!-- UI/UX Recommendations Modal (Hidden by default) -->
+    <div id="ux-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-6">
+            <h2 class="text-2xl font-bold mb-4">UI/UX Recommendations</h2>
+            <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                <li><strong>Dark Mode:</strong> Implement a toggle for late-night coding sessions.</li>
+                <li><strong>Gamification:</strong> Add badges (e.g., "HTML Master") when a section reaches 100%.</li>
+                <li><strong>Resource Links:</strong> Add a small link icon next to each topic pointing to MDN or W3Schools.</li>
+                <li><strong>Notes:</strong> Allow users to attach personal notes or code snippets to each task.</li>
+                <li><strong>Drag & Drop:</strong> Allow reordering of tasks if the learning path is flexible.</li>
+            </ul>
+            <button onclick="document.getElementById('ux-modal').classList.add('hidden')" class="mt-6 w-full bg-indigo-600 text-white py-2 rounded-lg">Close</button>
+        </div>
+    </div>
+
+    <!-- Floating Action Button for UX Tips -->
+    <button onclick="document.getElementById('ux-modal').classList.remove('hidden')" class="fixed bottom-6 right-6 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 p-4 rounded-full shadow-lg transition-transform hover:scale-110 z-40" title="View UX Tips">
+        <i class="fa-solid fa-lightbulb text-xl"></i>
+    </button>
+
+    <script>
+        // --- DATA STRUCTURE (Parsed from your file) ---
+        const roadmapData = [
+            {
+                id: "html",
+                title: "HTML5 Mastery",
+                category: "frontend",
+                description: "The skeleton of the web. First 15% of the journey.",
+                topics: [
+                    "HTML Introduction", "HTML Editors", "HTML Basic", "HTML Elements", "HTML Attributes", 
+                    "HTML Headings", "HTML Paragraphs", "HTML Styles", "HTML Formatting", "HTML Quotations", 
+                    "HTML Comments", "HTML Colors", "HTML Styles - CSS", "HTML Links", "HTML Images", 
+                    "HTML Favicon", "HTML Page Title", "HTML Tables", "HTML Lists", "HTML Block & Inline", 
+                    "HTML Div", "HTML Classes", "HTML IDs", "HTML Buttons", "HTML Iframes", "HTML JavaScript", 
+                    "HTML File Paths", "HTML Head Element", "HTML Layouts", "HTML Responsive", "HTML Computer Code", 
+                    "HTML Semantic", "HTML Entities", "HTML Symbols", "HTML Emojis", "HTML Encoding", 
+                    "HTML URL", "HTML vs XHTML", "HTML Forms", "HTML Graphics", "HTML Media"
+                ]
+            },
+            {
+                id: "css",
+                title: "CSS3 Styling",
+                category: "frontend",
+                description: "Making it beautiful. Deep dive into styling.",
+                topics: [
+                    "CSS Introduction", "CSS Syntax", "CSS Selectors", "How To Add CSS", "CSS Comments", 
+                    "CSS Colors", "CSS Backgrounds", "CSS Borders", "CSS Margins", "CSS Padding", 
+                    "CSS Height/Width", "CSS Box Model", "CSS Outline", "CSS Text", "CSS Fonts", 
+                    "CSS Icons", "CSS Links", "CSS Lists", "CSS Tables", "CSS Display", 
+                    "CSS Max-width", "CSS Position", "CSS Z-index", "CSS Overflow", "CSS Float", 
+                    "CSS Inline-block", "CSS Align", "CSS Combinators", "CSS Pseudo-classes", "CSS Pseudo-elements", 
+                    "CSS Opacity", "CSS Navigation Bar", "CSS Dropdowns", "CSS Image Gallery", "CSS Image Sprites", 
+                    "CSS Attr Selectors", "CSS Forms", "CSS Counters", "CSS Units", "CSS Specificity", 
+                    "CSS !important", "CSS Math Functions", "CSS Flexbox", "CSS Grid", "CSS Media Queries", 
+                    "CSS Variables", "CSS Animations", "CSS Transitions", "CSS Transforms", "CSS Shadows", 
+                    "CSS Gradients", "CSS Tooltips", "CSS Masking", "CSS Object-fit"
+                ]
+            },
+            {
+                id: "js",
+                title: "JavaScript Core",
+                category: "frontend",
+                description: "The brain of the web. Logic and interactivity.",
+                topics: [
+                    "JS Introduction", "JS Output", "JS Statements", "JS Syntax", "JS Comments", 
+                    "JS Variables", "JS Let", "JS Const", "JS Operators", "JS Arithmetic", 
+                    "JS Assignment", "JS Data Types", "JS Functions", "JS Objects", "JS Events", 
+                    "JS Strings", "JS String Methods", "JS Numbers", "JS Arrays", "JS Array Methods", 
+                    "JS Array Sort", "JS Array Iteration", "JS Dates", "JS Math", "JS Random", 
+                    "JS Booleans", "JS Comparisons", "JS If Else", "JS Switch", "JS Loop For", 
+                    "JS Loop While", "JS Break", "JS Sets", "JS Maps", "JS Typeof", 
+                    "JS Type Conversion", "JS Bitwise", "JS RegExp", "JS Errors", "JS Scope", 
+                    "JS Hoisting", "JS Strict Mode", "JS This", "JS Arrow Function", "JS Classes", 
+                    "JS Modules", "JS JSON", "JS Debugging", "DOM Introduction", "DOM Methods", 
+                    "DOM Document", "DOM Elements", "DOM HTML", "DOM CSS", "DOM Events", 
+                    "DOM Event Listener", "DOM Navigation", "DOM Nodes", "DOM Collections"
+                ]
+            },
+            {
+                id: "tailwind",
+                title: "Tailwind CSS",
+                category: "frontend",
+                description: "Utility-first CSS framework. Covers 80% use cases.",
+                topics: [
+                    "Tailwind Setup", "Utility First Concept", "Hover, Focus & Other States", 
+                    "Responsive Design", "Dark Mode", "Reusing Styles", "Customizing Configuration", 
+                    "Flexbox & Grid", "Spacing", "Sizing", "Typography", "Backgrounds", "Borders", "Effects"
+                ]
+            },
+            {
+                id: "react",
+                title: "React JS",
+                category: "frontend",
+                description: "Frontend Library. The next 10% of the journey.",
+                topics: [
+                    "React Intro", "React ES6", "React Render HTML", "React JSX", "React Components", 
+                    "React Class", "React Props", "React Events", "React Conditionals", "React Lists", 
+                    "React Forms", "React Router", "React Memo", "React CSS Styling", "React Sass", 
+                    "React Hooks (useState)", "React Hooks (useEffect)", "React Custom Hooks", 
+                    "Context API", "State Management"
+                ]
+            },
+            {
+                id: "projects_guided",
+                title: "Guided Projects",
+                category: "projects",
+                description: "Building projects by referring to YouTube/Tutorials.",
+                topics: [
+                    "Setup Environment", "Project Planning", "UI Implementation", 
+                    "Functional Logic", "API Integration", "Debugging", "Final Polish"
+                ]
+            },
+            {
+                id: "projects_own",
+                title: "Solo Project",
+                category: "projects",
+                description: "Building a project completely on your own.",
+                topics: [
+                    "Ideation", "Wireframing", "Frontend Dev", "Problem Solving", "Deployment"
+                ]
+            },
+            {
+                id: "backend",
+                title: "Backend (Node/Express/Mongo)",
+                category: "backend",
+                description: "Server-side programming and Database.",
+                topics: [
+                    "Node.js Intro", "Node.js Modules", "Node.js File System", "NPM", "Events", 
+                    "Express Setup", "Express Middleware", "Express Routing", "REST API Design", 
+                    "MongoDB Intro", "Mongoose Schemas", "Mongoose Models", "CRUD Operations", 
+                    "Authentication (JWT)", "API Security"
+                ]
+            },
+            {
+                id: "final",
+                title: "Full Stack Integration",
+                category: "projects",
+                description: "Combining all skills into one massive project.",
+                topics: [
+                    "Architecture Design", "Frontend-Backend Connection", "State Management (Redux/Context)", 
+                    "Database Optimization", "Deployment (Vercel/Heroku)", "CI/CD Basics"
+                ]
+            }
+        ];
+
+        // --- APP LOGIC ---
+
+        const container = document.getElementById('roadmap-container');
+        const STORAGE_KEY = 'fsd_tracker_progress';
+
+        // Load progress from local storage
+        function getProgress() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : {};
+        }
+
+        // Save progress
+        function saveProgress(id, isChecked) {
+            const progress = getProgress();
+            if (isChecked) {
+                progress[id] = true;
+                triggerConfetti();
+            } else {
+                delete progress[id];
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            updateStats();
+            renderRoadmap(); // Re-render to update progress bars per card
+        }
+
+        // Reset all
+        function resetProgress() {
+            if(confirm("Are you sure you want to reset all your progress?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // Initialize UI
+        function renderRoadmap(filter = 'all') {
+            container.innerHTML = '';
+            const progressData = getProgress();
+            
+            roadmapData.forEach(section => {
+                if (filter !== 'all' && section.category !== filter) return;
+
+                // Calculate Section Progress
+                let completedInThisSection = 0;
+                section.topics.forEach((t, index) => {
+                    const uniqueId = `${section.id}-${index}`;
+                    if (progressData[uniqueId]) completedInThisSection++;
+                });
+                const percentage = Math.round((completedInThisSection / section.topics.length) * 100);
+
+                // Create Card HTML
+                const card = document.createElement('div');
+                card.className = 'section-card bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col';
+                
+                let topicsHtml = '';
+                section.topics.forEach((topic, index) => {
+                    const uniqueId = `${section.id}-${index}`;
+                    const isChecked = progressData[uniqueId] ? 'checked' : '';
+                    
+                    topicsHtml += `
+                        <label class="custom-checkbox flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
+                            <div class="relative flex items-center">
+                                <input type="checkbox" class="opacity-0 absolute h-0 w-0" ${isChecked} onchange="saveProgress('${uniqueId}', this.checked)">
+                                <div class="bg-white border-2 border-gray-300 w-6 h-6 rounded flex flex-shrink-0 justify-center items-center transition-all duration-200 focus-within:border-indigo-500">
+                                    <svg class="hidden w-3 h-3 text-white pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-700 select-none ${isChecked ? 'line-through text-gray-400' : ''}">${topic}</span>
+                        </label>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="p-6 border-b border-gray-100 bg-gray-50">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">${section.title}</h2>
+                                <p class="text-xs text-gray-500 mt-1">${section.description}</p>
+                            </div>
+                            <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded-md">${percentage}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                            <div class="bg-indigo-600 h-2 rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                    <div class="p-4 grid grid-cols-1 gap-1 max-h-80 overflow-y-auto">
+                        ${topicsHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            updateStats();
+        }
+
+        // Update Global Stats
+        function updateStats() {
+            const progressData = getProgress();
+            const totalTasks = roadmapData.reduce((acc, section) => acc + section.topics.length, 0);
+            const completedTasks = Object.keys(progressData).length;
+            const percent = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+
+            // Update DOM
+            document.getElementById('total-percent').innerText = `${percent}%`;
+            document.getElementById('circle-percent').innerText = `${percent}%`;
+            document.getElementById('completed-count').innerText = completedTasks;
+            document.getElementById('remaining-count').innerText = totalTasks - completedTasks;
+
+            // Update Circle Stroke
+            const circle = document.getElementById('main-progress-ring');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        // Filter Functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Remove active class from all
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-indigo-600', 'text-white');
+                    b.classList.add('bg-white', 'text-gray-600');
+                });
+                // Add active to clicked
+                e.target.classList.remove('bg-white', 'text-gray-600');
+                e.target.classList.add('bg-indigo-600', 'text-white');
+                
+                renderRoadmap(e.target.dataset.filter);
+            });
+        });
+
+        // Simple Confetti
+        function triggerConfetti() {
+            const colors = ['#EF476F', '#FFD166', '#06D6A0', '#118AB2', '#073B4C'];
+            for(let i=0; i<30; i++) {
+                const conf = document.createElement('div');
+                conf.classList.add('confetti');
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                document.body.appendChild(conf);
+                setTimeout(() => conf.remove(), 3000);
+            }
+        }
+
+        // Initial Load
+        renderRoadmap();
+
+    </script>
+</body>
+</html>

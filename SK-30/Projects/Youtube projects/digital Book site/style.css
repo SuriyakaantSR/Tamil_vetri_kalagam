@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+/* Navigation Bar Styling */
+.navbar {
+    background-color: #FD6569;
+    padding: 10px;
+}
+
+.navbar h1 {
+    color: white;
+}
+
+/* Main Container for Books */
+.container {
+    padding: 10px;
+}
+
+/* Individual Book Container (Each Book Card) */
+.book-container {
+    padding: 15px;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    width: 25%;
+    margin-right: 30px;
+    margin-top: 20px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.book-container h2 {
+    color: #FD6569;
+}
+
+/* Delete Button inside each Book Card */
+.book-container button {
+    background-color: #FD6569;
+    color: black;
+    border-radius: 10px;
+    padding: 5px 10px;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Add Popup Button (‘+’) Styling */
+.add-button {
+    background-color: #FD6569;
+    color: black;
+    border-radius: 100%;
+    padding: 20px 30px;
+    font-size: 40px;
+    border: none;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    z-index: 10;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+}
+
+.add-button:hover {
+    transform: scale(1.1);
+}
+
+/* Popup Overlay */
+.popup-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    display: none;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Popup Box */
+.popup-box {
+    background-color: #FD6569;
+    width: 40%;
+    padding: 40px;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    z-index: 10;
+    display: none;
+    animation: popupIn 0.3s ease forwards;
+}
+
+/* Input Fields */
+.popup-box input {
+    background-color: #FD6569;
+    width: 100%;
+    padding: 5px;
+    margin: 5px 5px 15px 5px;
+    border: none;
+    border-bottom: solid black 2px;
+    font-size: 18px;
+}
+
+.popup-box textarea {
+    background-color: #FD6569;
+    width: 100%;
+    padding: 5px;
+    margin: 5px;
+    border: solid black 2px;
+    font-size: 18px;
+    resize: none;
+    height: 80px;
+}
+
+/* Placeholder Color */
+.popup-box input::placeholder,
+.popup-box textarea::placeholder {
+    color: black;
+}
+
+/* Buttons inside Popup (ADD/CANCEL) */
+.popup-box button {
+    background-color: black;
+    color: #FD6569;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Focus Effects */
+.popup-box input:focus,
+.popup-box textarea:focus {
+    outline: none;
+    border-bottom: solid black 2px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popupIn {
+    from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+    to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
